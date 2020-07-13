@@ -1,0 +1,47 @@
+#MOST DIALOGUE 
+
+#Import necessary libraries
+import re
+import matplotlib.pyplot as plt
+
+#Special Function for splitting matches by spaces and filtering out \n and special characters(?,!)
+def filterList(x):
+    result = []
+    for i in x:
+        for k in i.split(" "):
+            k = re.sub('[!.?,]', '', k)
+            k = re.sub("\n","", k)
+            if(k != "" and k != "\n"):
+                result.append(k)
+    
+    return result
+
+#Open text file (read only) and store it inside a variable 
+txt = open("starwars.txt", "r")
+file_contents = txt.read()
+
+#Apply changes for tokenizer
+file_contents = file_contents.replace("\n\n","|")
+
+#Find all matches for all important characters using regex string
+lukeResults = re.findall("(?<=LUKE)([\w\n]+[\w' !?\n.,-]+)", file_contents)
+vaderResults = re.findall("(?<=VADER)([\w\n]+[\w' !?\n.,-]+)", file_contents)
+benResults = re.findall("(?<=BEN)([\w\n]+[\w' !?\n.,-]+)", file_contents)
+leiaResults = re.findall("(?<=LEIA)([\w\n]+[\w' !?\n.,-]+)", file_contents)
+hanResults = re.findall("(?<=HAN)([\w\n]+[\w' !?\n.,-]+)", file_contents)
+
+#Graph results
+graphLabels = ["Luke", "Vader", "Ben", "Leia", "Han"]
+graphValues = [len(filterList(lukeResults)),
+               len(filterList(vaderResults)),
+               len(filterList(benResults)),
+               len(filterList(leiaResults)),
+               len(filterList(hanResults))]
+
+
+plt.bar(graphLabels,graphValues)
+
+for i,j in zip(graphLabels,graphValues):
+    plt.text(i,j,j)
+    
+plt.show()
