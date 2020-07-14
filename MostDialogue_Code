@@ -16,6 +16,11 @@ def filterList(x):
     
     return result
 
+#Special Function for removing text inside parenthesis before dialogue
+def removeParenthesis(regexString, file_contents):
+    file_contents = re.sub(regexString, "", file_contents)
+    return file_contents
+
 #Open text file (read only) and store it inside a variable 
 txt = open("starwars.txt", "r")
 file_contents = txt.read()
@@ -23,6 +28,13 @@ file_contents = txt.read()
 #Apply changes for tokenizer
 file_contents = file_contents.lower()
 file_contents = file_contents.replace("\n\n","|")
+
+#Remove all Descriptive Text
+file_contents = removeParenthesis(r"(?<=\bluke\b)\s+[(][\w ,+?!]+[)]", file_contents)
+file_contents = removeParenthesis(r"(?<=\bvader\b)\s+[(][\w ,+?!]+[)]", file_contents)
+file_contents = removeParenthesis(r"(?<=\bben\b)\s+[(][\w ,+?!]+[)]", file_contents)
+file_contents = removeParenthesis(r"(?<=\bleia\b)\s+[(][\w ,+?!]+[)]", file_contents)
+file_contents = removeParenthesis(r"(?<=\bhan\b)\s+[(][\w ,+?!]+[)]", file_contents)
 
 #Find all matches for all important characters using regex string
 lukeResults = re.findall(r"(?<=\bluke\b)([\w\n]+[\w' !?\n.,-]+)", file_contents)
